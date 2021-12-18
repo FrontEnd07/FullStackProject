@@ -1,11 +1,15 @@
 var express = require('express');
-const app = express();
+const app = express(),
+    PORT = process.env.PORT || 8080,
+    UserRouter = require("./Router/user.router.js"),
+    ProductRouter = require("./Router/product.router.js");
+
 
 app.use(express.json());
 app.use(express.static("static"));
 app.use(express.urlencoded({ extended: true }))
-
-const PORT = process.env.PORT || 8080;
+app.use("/api", UserRouter)
+app.use("/api", ProductRouter)
 
 async function startApp() {
     try {
