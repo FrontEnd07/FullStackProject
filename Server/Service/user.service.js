@@ -1,16 +1,30 @@
-import Post from "./Post.js";
-import fileService from "./FileService.js";
+const db = require("../db.js");
+const { mysql_real_escape_string } = require("./../Utils/sql");
+const {
+    generateSalt,
+    hash,
+    compare
+} = require('./../Utils/passwordHash');
 
-class PostService {
-    async create(post, picture) {
-        const fileName = fileService.saveFile(picture);
-        const createdPost = await Post.create({...post, picture: fileName})
-        return createdPost;
+
+
+class UserService {
+
+    async create(post) {
+        let salt = generateSalt(10);
+        const { email, pass } = post
+        const user = await db.query("SELECT * FROM public.customers WHERE email=$1", [email])
+        if (user.rows.length === 0) {
+            const createdPost = await db.query("INSERT INTO customers (Email, Pass) VALUES ($1, $2) RETURNING *", [email, mysql_real_escape_string(await hash(pass, salt))])
+            return createdPost;
+        } else {
+            return user;
+        }
     }
 
     async getAll() {
-        const posts = await Post.find();
-        return posts;
+        const getAll = db.query("SELECT * FROM customers");
+        return getAll;
     }
 
     async getOne(id) {
@@ -21,12 +35,16 @@ class PostService {
         return post;
     }
 
-    async update(post) {
-        if (!post._id) {
-            throw new Error("id не указан!")
+    async getCustomer(customer) {
+        let {
+            email,
+            pass
+        } = customer;
+        const result = await db.query("SELECT * FROM public.customers WHERE email=$1", [email])
+        let match = await compare(pass, JSON.parse(result.rows[0].pass));
+        if (match) {
+            return result;
         }
-        const updatePost = await Post.findByIdAndUpdate(post._id, post, {new: true});
-        return updatePost;
     }
 
     async delete(id) {
@@ -38,4 +56,4 @@ class PostService {
     }
 }
 
-export default new PostService();
+module.exports = new UserService();

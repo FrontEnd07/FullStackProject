@@ -1,10 +1,12 @@
-// const db = require("../../db.js");
+
+
+const UserService = require("../Service/user.service");
 
 class UserController {
+
     async createUser(req, res) {
         try {
-            const { firstname, price, pcs } = req.body;
-            const result = await db.query("INSERT INTO products (firstname, price, pcs) VALUES ($1, $2, $3) RETURNING *", [firstname, price, pcs])
+            const result = await UserService.create(req.body);
             res.status(201).json(result.rows[0]);
         } catch (e) {
             res.json(e.message)
@@ -13,8 +15,7 @@ class UserController {
 
     async getUser(req, res) {
         try {
-            const result = await db.query("SELECT * FROM products");
-            console.log(result)
+            const result = await UserService.getAll()
             res.status(200).json(result.rows);
         } catch (e) {
             res.json(e.message)
@@ -33,7 +34,14 @@ class UserController {
             res.json(e.message);
         }
     }
-
+    async getCustomer(req, res) {
+        try {
+            const result = await UserService.getCustomer(req.body);
+            res.status(201).json(result.rows[0]);
+        } catch (e) {
+            res.json(e.message);
+        }
+    }
     async updateUser(req, res) {
         try {
             const { id, firstname, price, pcs } = req.body;
