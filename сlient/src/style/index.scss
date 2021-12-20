@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@mixin container($width: 1100px) {
+  max-width: $width;
+  margin: 0 auto;
+  padding: 0 50px;
+  height: 100%;
+}

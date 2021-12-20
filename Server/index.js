@@ -3,6 +3,7 @@ const app = express(),
     PORT = process.env.PORT || 8080,
     UserRouter = require("./Router/user.router.js"),
     ProductRouter = require("./Router/product.router.js");
+require("dotenv").config();
 
 
 app.use(express.json());

@@ -24,21 +24,23 @@ class UserService {
 
         let salt = generateSalt(10);
 
-        pass = mysql_real_escape_string(await hash(decode(pass), salt));
+        let password = mysql_real_escape_string(await hash(decode(pass), salt));
 
-        const createdPost = await db.query("INSERT INTO customers (Email, Pass) VALUES ($1, $2) RETURNING *", [email, pass])
+        const createdPost = await db.query("INSERT INTO customers (Email, Pass) VALUES ($1, $2) RETURNING *", [email, password])
 
         const token = jwt.sign(
             { user_id: createdPost.rows[0].id, email },
-            process.env.TOKEN_KEY,
+            process.env.TOKEN_SECRET,
             {
                 expiresIn: "2h",
             }
         );
 
-        createdPost.rows[0].token = token;
-
-        return createdPost;
+        return {
+            "id": createdPost.rows[0].id,
+            "email": createdPost.rows[0].email,
+            "token": token
+        };
 
     }
 
@@ -58,13 +60,18 @@ class UserService {
 
         const result = await db.query("SELECT * FROM public.customers WHERE email=$1", [email])
 
+        if (result.rows.length === 0) {
+            throw new Error("Email не существует!");
+            return;
+        }
+
         let match = await compare(pass, JSON.parse(result.rows[0].pass));
 
-        if (result.rows.length > 0 && match) {
+        if (match) {
 
             const token = jwt.sign(
                 { user_id: result.rows[0].id, email },
-                process.env.TOKEN_KEY,
+                process.env.TOKEN_SECRET,
                 {
                     expiresIn: "2h",
                 }
@@ -72,9 +79,15 @@ class UserService {
 
             result.rows[0].token = token;
 
-            return result;
+            return {
+                "id": result.rows[0].id,
+                "email": result.rows[0].email,
+                "token": result.rows[0].token
+            };
+        } else {
+            throw new Error("Неверные учетные данные!");
+            return;
         }
-        throw new Error("Неверные учетные данные!");
     }
 }
 

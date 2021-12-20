@@ -7,7 +7,7 @@ class UserController {
     async createUser(req, res) {
         try {
             const result = await UserService.create(req.body);
-            res.status(201).json(result.rows[0]);
+            res.status(201).json(result);
         } catch (e) {
             res.json(e.message)
         }
@@ -37,7 +37,7 @@ class UserController {
     async getCustomer(req, res) {
         try {
             const result = await UserService.getCustomer(req.body);
-            res.status(201).json(result.rows[0]);
+            res.status(200).json(result);
         } catch (e) {
             res.json(e.message);
         }
