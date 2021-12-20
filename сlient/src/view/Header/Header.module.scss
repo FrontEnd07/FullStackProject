@@ -5,18 +5,18 @@
     background: #fff;
     z-index: 999;
 
-    >.container {
+    > .container {
         @include container(1100px);
 
-        >nav {
-            >.logo {
+        > nav {
+            > .logo {
                 display: flex;
 
-                >a {
+                > a {
                     display: flex;
                     width: 120px;
 
-                    >img {
+                    > img {
                         width: 100%;
                     }
                 }

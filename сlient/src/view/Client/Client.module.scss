@@ -1,2 +1,6 @@
+@import "@style/index.scss";
+
 .main {
+    @include container(900px);
+    padding: 25px 30px;
 }
