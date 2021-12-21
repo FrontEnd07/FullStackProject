@@ -4,9 +4,13 @@
     @include container(900px);
     padding: 25px 30px;
 
-    > .ButtonGroup {
-        > .selected {
+    >.ButtonGroup {
+        overflow: hidden;
+        margin-bottom: 25px;
+
+        .active {
             color: #000000;
+            background-color: aqua;
         }
     }
 }

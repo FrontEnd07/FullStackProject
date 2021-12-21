@@ -14,8 +14,19 @@ const Admin = () => {
                 {[
                     { title: 'Список товаров', link: "/admin", exact: false },
                     { title: 'Заказы', link: "/admin/order", exact: false },
-                    { title: 'Список товаров', link: "/admin/create", exact: false }
-                ].map((el, i) => <ListItem button key={i} component={NavLink} to={el.link} end>
+                    { title: 'Добавить товары', link: "/admin/create", exact: false }
+                ].map((el, i) => <ListItem
+                    button
+                    end
+                    key={i}
+                    component={NavLink}
+                    to={el.link}
+                    style={({ isActive }) => {
+                        return {
+                            background: isActive ? "rgb(40 37 34 / 47%)" : "",
+                            color: isActive ? "white" : ""
+                        };
+                    }}>
                     {el.title}
                 </ListItem>
                 )}
