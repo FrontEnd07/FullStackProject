@@ -10,8 +10,6 @@ export const LFeild = props => {
         appClassName,
         type,
         onChange,
-        inputRef,
-        max,
         ...rest
     } = props;
 
@@ -20,15 +18,15 @@ export const LFeild = props => {
             <Controller
                 name={rest.name}
                 control={rest.control}
+                defaultValue={''}
                 render={({ field }) => (
-                    <TextField {...field}
-                        id="outlined-basic"
-                        label="Outlined"
+                    <TextField
                         type={type}
                         onChange={onChange}
                         variant="outlined"
                         error={!!errors[rest.name]}
                         label={rest.label}
+                        {...field}
                     />
                 )}
             />
