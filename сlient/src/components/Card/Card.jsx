@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export const CardItem = ({ data }) => {
-    console.log(data)
+
     return (
         <Grid container spacing={{ xs: 2, sm: 2, md: 1 }} columns={{ xs: 4, sm: 12, md: 12 }}>
             {Array.from(Array(6)).map((_, index) => (

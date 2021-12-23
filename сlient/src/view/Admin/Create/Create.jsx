@@ -1,15 +1,17 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import style from "./Create.module.scss";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { LFeild } from "@components/LFeild";
 import Button from '@mui/material/Button';
+import { postCreateApi } from "@http/Admin";
+import { useDispatch } from "react-redux";
 
 const schema = yup.object().shape({
     heading: yup.string().required('empty'),
     descriptions: yup.string().required('empty'),
-    remainder: yup.number().required('empty'),
+    remainder: yup.number().required('empty').integer(),
     price: yup.number().required('empty'),
     picture: yup.mixed().required('empty')
         .test("FileList", "image", (value) => {
@@ -18,7 +20,7 @@ const schema = yup.object().shape({
 });
 
 const Create = () => {
-
+    const dispatch = useDispatch()
 
     const {
         handleSubmit,
@@ -31,7 +33,15 @@ const Create = () => {
     });
 
     const handlerSubmit = data => {
-        console.log(data)
+
+        const formData = new FormData()
+        formData.append('heading', data.heading)
+        formData.append('descriptions', data.descriptions)
+        formData.append('remainder', data.remainder)
+        formData.append('price', data.price)
+        formData.append('picture', data.picture[0])
+
+        dispatch(postCreateApi(formData))
     };
 
     return (
@@ -88,7 +98,6 @@ const Create = () => {
                             id="picture"
                             {...register('picture')}
                             type="file"
-                            name="picture"
                             hidden
                         />
                     </Button>
