@@ -1,5 +1,3 @@
-
-
 const UserService = require("../Service/user.service");
 
 class UserController {

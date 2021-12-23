@@ -1,10 +1,9 @@
-// const db = require("../../db.js");
+const ProductService = require("../Service/product.service");
 
 class ProductController {
     async createProduct(req, res) {
         try {
-            const { firstname, price, pcs } = req.body;
-            const result = await db.query("INSERT INTO products (firstname, price, pcs) VALUES ($1, $2, $3) RETURNING *", [firstname, price, pcs])
+            const result = await ProductService.create(req.body, req.files.picture);
             res.status(201).json(result.rows[0]);
         } catch (e) {
             res.json(e.message)

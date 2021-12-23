@@ -1,21 +1,26 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import style from "./Create.module.scss";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { LFeild } from "@components/LFeild";
 import Button from '@mui/material/Button';
+import { postCreateApi } from "@http/Admin";
+import { useDispatch } from "react-redux";
 
 const schema = yup.object().shape({
     heading: yup.string().required('empty'),
     descriptions: yup.string().required('empty'),
     remainder: yup.number().required('empty'),
     price: yup.number().required('empty'),
-    picture: yup.mixed().required('empty'),
+    picture: yup.mixed().required('empty')
+        .test("FileList", "image", (value) => {
+            return value.length > 0 ? value[0].size <= 2000000 : null
+        }),
 });
 
 const Create = () => {
-
+    const dispatch = useDispatch()
 
     const {
         handleSubmit,
@@ -27,10 +32,9 @@ const Create = () => {
         resolver: yupResolver(schema)
     });
 
-    const inputFile = useRef(null);
-
     const handlerSubmit = data => {
-        console.log(data)
+        // console.log(data)
+        dispatch(postCreateApi(data))
     };
 
     console.log(errors)
@@ -86,11 +90,8 @@ const Create = () => {
                     <Button variant="contained" component="label">
                         Upload File
                         <input
-                            ref={inputFile}
-                            id="picture"
-                            // {...register('picture', { required: true })}
+                            {...register('picture')}
                             type="file"
-                            name="picture"
                             hidden
                         />
                     </Button>

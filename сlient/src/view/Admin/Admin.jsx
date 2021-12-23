@@ -12,9 +12,9 @@ const Admin = () => {
         <div className={style.main}>
             <ButtonGroup variant="contained" className={style.ButtonGroup} aria-label="outlined primary button group">
                 {[
-                    { title: 'Список товаров', link: "/admin", exact: false },
-                    { title: 'Заказы', link: "/admin/order", exact: false },
-                    { title: 'Добавить товары', link: "/admin/create", exact: false }
+                    { title: 'Список товаров', link: "/admin" },
+                    { title: 'Заказы', link: "/admin/order" },
+                    { title: 'Добавить товары', link: "/admin/create" }
                 ].map((el, i) => <ListItem
                     button
                     end

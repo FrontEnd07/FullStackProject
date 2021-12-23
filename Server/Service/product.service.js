@@ -1,11 +1,13 @@
+const db = require("../db");
 // import Post from "./Post.js";
-// import fileService from "./FileService.js";
+const fileService = require("./file.service");
 
 class PostService {
     async create(post, picture) {
+        const { heading, descriptions, remainder, price } = post;
         const fileName = fileService.saveFile(picture);
-        const createdPost = await Post.create({ ...post, picture: fileName })
-        return createdPost;
+        const result = await db.query("INSERT INTO product (heading, descriptions, remainder, price, picture) VALUES ($1, $2, $3, $4, $5) RETURNING *", [heading, descriptions, remainder, Number(price), fileName])
+        return result;
     }
 
     async getAll() {
@@ -38,4 +40,4 @@ class PostService {
     }
 }
 
-export default new PostService();
+module.exports = new PostService();
