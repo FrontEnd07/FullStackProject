@@ -11,7 +11,10 @@ const schema = yup.object().shape({
     descriptions: yup.string().required('empty'),
     remainder: yup.number().required('empty'),
     price: yup.number().required('empty'),
-    picture: yup.mixed().required('empty'),
+    picture: yup.mixed().required('empty')
+        .test("FileList", "image", (value) => {
+            return value.length > 0 ? value[0].size < 2000000 : null
+        }),
 });
 
 const Create = () => {
@@ -27,13 +30,9 @@ const Create = () => {
         resolver: yupResolver(schema)
     });
 
-    const inputFile = useRef(null);
-
     const handlerSubmit = data => {
         console.log(data)
     };
-
-    console.log(errors)
 
     return (
         <div className={style.main}>
@@ -86,9 +85,8 @@ const Create = () => {
                     <Button variant="contained" component="label">
                         Upload File
                         <input
-                            ref={inputFile}
                             id="picture"
-                            // {...register('picture', { required: true })}
+                            {...register('picture')}
                             type="file"
                             name="picture"
                             hidden
