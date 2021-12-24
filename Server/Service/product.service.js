@@ -1,8 +1,7 @@
 const db = require("../db");
-// import Post from "./Post.js";
 const fileService = require("./file.service");
 
-class PostService {
+class ProductService {
     async create(post, picture) {
         const { heading, descriptions, remainder, price } = post;
         const fileName = fileService.saveFile(picture);
@@ -11,16 +10,25 @@ class PostService {
     }
 
     async getAll() {
-        const posts = await db.query("SELECT * FROM product");
-        return posts;
+        const posts = await db.query("SELECT * FROM product ORDER BY id DESC");
+        if (posts.rows.length > 0) {
+            return posts.rows;
+        } else {
+            return "Нет товаров!";
+        }
     }
-
-
-    async update(post, picture) {
-        if (!post._id) {
+    async getOneProduct(id) {
+        if (!id) {
             throw new Error("id не указан!")
         }
-        const { heading, descriptions, remainder, price } = post;
+        const posts = await db.query("SELECT * FROM product WHERE id=$1", [id]);
+        return posts;
+    }
+    async update(post, picture) {
+        if (!post.id) {
+            throw new Error("id не указан!")
+        }
+        const { heading, descriptions, remainder, price, id } = post;
         const fileName = fileService.saveFile(picture);
         const updatePost = await db.query("UPDATE product SET heading=$1, descriptions=$2, remainder=$3, price=$4, picture=$5 WHERE id=$6 RETURNING *", [heading, descriptions, remainder, price, fileName, id])
         return updatePost;
@@ -30,9 +38,9 @@ class PostService {
         if (!id) {
             throw new Error("id не указан!");
         }
-        const post = await Post.findByIdAndDelete(id)
-        return post;
+        const result = await db.query("DELETE FROM product WHERE id=$1", [id]);
+        return result;
     }
 }
 
-module.exports = new PostService();
+module.exports = new ProductService();

@@ -1,4 +1,5 @@
 import React from 'react';
+import style from "./Card.module.scss";
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -6,36 +7,47 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 
-export const CardItem = ({ data }) => {
+export const CardItem = ({ data, deleteHendler, changeProduct, type, deleteB, changeB }) => <Grid container className={style.main} spacing={{ xs: 2, sm: 2, md: 1 }} columns={{ xs: 4, sm: 12, md: 12 }}>
+    {data ? data.map((el) => <Grid item xs={2} sm={4} md={3} key={el.id}>
+        <Card sx={{ maxWidth: 345 }}>
+            <CardMedia
+                className={style.image}
+                component="img"
+                alt={el.heading}
+                image={`${process.env.REACT_APP_API_URL}${el.picture}`}
+            />
+            <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                    {el.heading}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {el.descriptions}
+                </Typography>
+                <Typography className={style.CPTypography} variant="body2" color="text.secondary">
+                    <span>{el.price}Цена</span>
+                    <span>{el.remainder}Кол-во</span>
+                </Typography>
+            </CardContent>
+            <CardActions>
+                {type === "admin" ?
+                    <>
+                        <Button onClick={() => changeProduct(el.id)} size="small" disabled={changeB}>Изменит</Button>
+                        <Button onClick={() => deleteHendler(el.id)} size="small" disabled={deleteB}>Удалить</Button>
+                    </>
+                    : <Button onClick={() => deleteHendler(el.id)} size="small">Заказать</Button>
+                }
 
-    return (
-        <Grid container spacing={{ xs: 2, sm: 2, md: 1 }} columns={{ xs: 4, sm: 12, md: 12 }}>
-            {Array.from(Array(6)).map((_, index) => (
-                <Grid item xs={2} sm={4} md={3} key={index}>
-                    <Card sx={{ maxWidth: 345 }}>
-                        <CardMedia
-                            component="img"
-                            alt="green iguana"
-                            image="https://gw.alicdn.com/bao/uploaded/i1/1030556691/O1CN01qSgyJU1zIWe99Nk5Q_!!1030556691.jpg"
-                        />
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                                Lizard
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Lizards are a widespread group of squamate reptiles, with over 6,000
-                                species, ranging across all continents except Antarctica
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small">Share</Button>
-                            <Button size="small">Learn More</Button>
-                        </CardActions>
-                    </Card >
-                </Grid>
-            ))}
+            </CardActions>
+        </Card >
+    </Grid>
+    ) : <>
+        {Array.from(Array(8)).map((_, i) => <Grid item xs={2} sm={4} md={3} key={i}>
+            <Skeleton variant="rectangular" height={210} />
+            <Skeleton />
+            <Skeleton width="60%" />
         </Grid>
-    );
-}
-
+        )}
+    </>}
+</Grid>

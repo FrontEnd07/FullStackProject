@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import style from "./Create.module.scss";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { LFeild } from "@components/LFeild";
 import Button from '@mui/material/Button';
-import { postCreateApi } from "@http/Admin";
-import { useDispatch } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { postCreateApi, postUpdateApi } from "@http/Admin";
+import { createAddAc, redirectAc } from "@store/Reducers/Admin"
+import { useDispatch, useSelector } from "react-redux";
 
 const schema = yup.object().shape({
     heading: yup.string().required('empty'),
@@ -20,7 +22,20 @@ const schema = yup.object().shape({
 });
 
 const Create = () => {
+
     const dispatch = useDispatch()
+    let { createB, createAdd, oneProduct } = useSelector(state => state.Admin)
+
+    let defaultValue;
+
+    if (oneProduct) {
+        defaultValue = {
+            heading: oneProduct.heading,
+            descriptions: oneProduct.descriptions,
+            remainder: oneProduct.remainder,
+            price: oneProduct.price,
+        }
+    }
 
     const {
         handleSubmit,
@@ -29,11 +44,16 @@ const Create = () => {
         formState: { errors }
     } = useForm({
         mode: 'onBlur',
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
+        defaultValues: oneProduct && defaultValue
     });
 
-    const handlerSubmit = data => {
+    useEffect(() => {
+        dispatch(redirectAc(false))
+        return () => dispatch(createAddAc(false))
+    }, [])
 
+    const handlerSubmit = data => {
         const formData = new FormData()
         formData.append('heading', data.heading)
         formData.append('descriptions', data.descriptions)
@@ -41,8 +61,15 @@ const Create = () => {
         formData.append('price', data.price)
         formData.append('picture', data.picture[0])
 
-        dispatch(postCreateApi(formData))
+        if (oneProduct) {
+            formData.append('id', oneProduct.id)
+            dispatch(postUpdateApi(formData))
+        } else {
+            dispatch(postCreateApi(formData))
+        }
     };
+
+    if (createAdd) return <Navigate to="/admin" />
 
     return (
         <div className={style.main}>
@@ -107,7 +134,7 @@ const Create = () => {
                 </div>
             </div>
             <div className={style.button}>
-                <Button onClick={handleSubmit(handlerSubmit)}>
+                <Button disabled={createB} onClick={handleSubmit(handlerSubmit)}>
                     Добавить
                 </Button>
             </div>

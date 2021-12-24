@@ -13,15 +13,22 @@ class ProductController {
     async getProduct(req, res) {
         try {
             const result = await ProductService.getAll();
-            res.status(200).json(result.rows);
+            res.status(200).json(result);
         } catch (e) {
             res.json(e.message)
         }
     }
-
+    async getOneProduct(req, res) {
+        try {
+            const result = await ProductService.getOneProduct(req.params.id);
+            res.status(200).json(result.rows[0]);
+        } catch (e) {
+            res.json(e.message)
+        }
+    }
     async updateProduct(req, res) {
         try {
-            const result = await ProductService.update(req.body)
+            const result = await ProductService.update(req.body, req.files.picture)
             res.status(200).json(result.rows[0])
         } catch (e) {
             req.status(405).json(e.message);
@@ -30,9 +37,8 @@ class ProductController {
 
     async deleteProduct(req, res) {
         try {
-            const id = req.params.id;
-            const result = await db.query("DELETE FROM products WHERE id=$1", [id]);
-            res.status(200).json(result.rows[0]);
+            const result = await ProductService.delete(req.params.id);
+            res.status(200).json(result.rows);
         } catch (e) {
             req.status(405).json(e.message);
         }
