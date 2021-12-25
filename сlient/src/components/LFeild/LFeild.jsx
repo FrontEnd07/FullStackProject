@@ -21,6 +21,7 @@ export const LFeild = props => {
                 defaultValue={''}
                 render={({ field }) => (
                     <TextField
+                        fullWidth
                         type={type}
                         onChange={onChange}
                         variant="outlined"

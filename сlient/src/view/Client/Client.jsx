@@ -1,15 +1,17 @@
 import React from 'react';
 import style from "./Client.module.scss";
 import { Route, Routes } from "react-router-dom";
-import Order from "./Order"
-import Card from "./Card"
+import { Card, Order, Customer } from "./index"
 
 const Client = () => {
+
+
     return (
         <div className={style.main}>
             <Routes>
                 <Route path='/' element={<Card />} />
-                <Route path='/order' element={<Order />} />
+                <Route path='/login' element={<Customer />} />
+                <Route path='/order/:id' element={<Order />} />
             </Routes>
         </div>
     );

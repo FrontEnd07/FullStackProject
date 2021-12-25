@@ -1,0 +1,47 @@
+.logout {
+    display: flex;
+    font-size: 24px;
+
+    :first-child {
+        margin-right: 10px;
+    }
+
+    :last-child {
+        color: orange;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.main {
+    height: calc(100vh - 113.89px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    >.form {
+        padding: 45px;
+        width: 360px;
+        -webkit-box-shadow: 0 0.25rem 0.55rem rgb(0 0 0 / 10%) !important;
+        box-shadow: 0 0.25rem 0.55rem rgb(0 0 0 / 10%) !important;
+
+        >div {
+            margin-bottom: 15px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        >.info {
+            :first-child {
+                >div {
+                    display: inherit;
+                }
+            }
+        }
+    }
+}

@@ -5,28 +5,34 @@
     background: #fff;
     z-index: 999;
 
-    > .container {
+    >.container {
         @include container(1100px);
 
-        > nav {
-            > .logo {
-                display: flex;
-
-                > a {
-                    display: flex;
-                    width: 120px;
-
-                    > img {
-                        width: 100%;
-                    }
-                }
-            }
-
+        >nav {
             padding: 10px 0px;
             display: grid;
             grid-template-columns: auto auto;
             align-items: center;
             justify-content: space-between;
+
+            >.logo {
+                display: flex;
+
+                >a {
+                    display: flex;
+                    width: 120px;
+
+                    >img {
+                        width: 100%;
+                    }
+                }
+            }
+
+            >.auth {
+                >a {
+                    text-decoration: none;
+                }
+            }
         }
     }
 }

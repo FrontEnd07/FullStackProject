@@ -8,6 +8,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import { Link } from "react-router-dom";
 
 export const CardItem = ({ data, deleteHendler, changeProduct, type, deleteB, changeB }) => <Grid container className={style.main} spacing={{ xs: 2, sm: 2, md: 1 }} columns={{ xs: 4, sm: 12, md: 12 }}>
     {data ? data.map((el) => <Grid item xs={2} sm={4} md={3} key={el.id}>
@@ -31,14 +32,15 @@ export const CardItem = ({ data, deleteHendler, changeProduct, type, deleteB, ch
                 </Typography>
             </CardContent>
             <CardActions>
-                {type === "admin" ?
+                {type === "admin" &&
                     <>
                         <Button onClick={() => changeProduct(el.id)} size="small" disabled={changeB}>Изменит</Button>
                         <Button onClick={() => deleteHendler(el.id)} size="small" disabled={deleteB}>Удалить</Button>
                     </>
-                    : <Button onClick={() => deleteHendler(el.id)} size="small">Заказать</Button>
                 }
-
+                {type === "client" &&
+                    <Button component={Link} to={`/order/${el.id}`} fullWidth>Заказать</Button>
+                }
             </CardActions>
         </Card >
     </Grid>
