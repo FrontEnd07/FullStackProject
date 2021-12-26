@@ -1,1 +1,10 @@
-.main {}
+.main {
+    .image {
+        max-height: 210px;
+    }
+
+    .CPTypography {
+        display: flex;
+        justify-content: space-between;
+    }
+}

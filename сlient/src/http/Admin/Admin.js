@@ -1,4 +1,5 @@
 import { $host } from "@http";
+import { display } from "@mui/system";
 import {
     getAllAc,
     createAc,
@@ -6,7 +7,8 @@ import {
     createAddAc,
     getOneProductAc,
     changeBAc,
-    redirectAc
+    redirectAc,
+    orderAc
 } from "@store/Reducers/Admin"
 
 export const postCreateApi = (payload) => async dispatch => {
@@ -33,7 +35,14 @@ export const getAllApi = () => async dispatch => {
         console.log(e.message)
     }
 };
-
+export const getAllOrderApi = () => async dispatch => {
+    try {
+        const { data } = await $host.get(`api/order`);
+        dispatch(orderAc(data))
+    } catch (e) {
+        console.log(e.message)
+    }
+}
 export const getOneProductApi = (id) => async dispatch => {
     dispatch(changeBAc(true))
     try {

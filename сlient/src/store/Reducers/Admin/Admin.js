@@ -7,7 +7,8 @@ const initialState = {
     createAdd: false,
     oneProduct: null,
     changeB: false,
-    redirect: false
+    redirect: false,
+    order: null
 }
 
 const Admin = createSlice({
@@ -34,6 +35,9 @@ const Admin = createSlice({
         },
         deleteProductAc(state, action) {
             state.deleteB = action.payload
+        },
+        orderAc(state, action) {
+            state.order = action.payload
         }
     }
 })
@@ -45,6 +49,7 @@ export const {
     createAddAc,
     getOneProductAc,
     changeBAc,
-    redirectAc
+    redirectAc,
+    orderAc
 } = Admin.actions
 export default Admin.reducer
